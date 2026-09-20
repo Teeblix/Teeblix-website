@@ -11,7 +11,7 @@ import { ContactForm } from "@/components/work/contact-form";
 import { PREFER_TO_TALK, WORK_LEAD } from "@/lib/work-content";
 
 const DESCRIPTION =
-  "Hire Blessing Adewale (Teeblix), freelance website designer and Framer developer: custom Framer websites, landing page design, Figma to Framer conversion, WordPress or Webflow to Framer migration. Start a project or book a free 30-minute discovery call.";
+  "Hire a freelance Framer developer and website designer for custom Framer sites, landing pages and migrations. Start a project or book a free discovery call.";
 
 export const metadata: Metadata = pageMetadata({
   title: "Work With Me — Hire a Framer Developer & Website Designer",

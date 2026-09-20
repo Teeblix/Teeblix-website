@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Home",
     path: "/",
     description:
-      "Freelance website designer & Framer developer. Custom Framer websites, landing pages, Figma to Framer conversion, WordPress & Webflow to Framer migration, and Framer templates.",
+      "Freelance website designer & Framer developer: Framer websites, landing pages, Figma to Framer, WordPress & Webflow migration, templates.",
   }),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
 };

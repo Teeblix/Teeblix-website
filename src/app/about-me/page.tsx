@@ -8,7 +8,7 @@ import { MobileNav } from "@/components/nav/mobile-nav";
 import { PageTransition } from "@/components/page-transition";
 
 const DESCRIPTION =
-  "About Blessing Adewale (Teeblix): a freelance UX/UI designer and Framer developer based in Nigeria, working with clients worldwide on Framer websites, landing pages, Figma to Framer conversion and WordPress or Webflow migrations.";
+  "Blessing Adewale (Teeblix): freelance UX/UI designer and Framer developer based in Nigeria, building Framer websites and landing pages for clients worldwide.";
 
 export const metadata: Metadata = pageMetadata({ title: "About Me — UX/UI Designer & Framer Developer", description: DESCRIPTION, path: "/about-me" });
 

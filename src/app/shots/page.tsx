@@ -10,7 +10,7 @@ import { ShotsWallResponsive } from "@/components/shots/shots-wall-responsive";
 import { SHOTS } from "@/lib/shots-content";
 
 const DESCRIPTION =
-  "UI design shots: selected screens, landing page details and motion from recent Framer website projects by Blessing Adewale (Teeblix), UX/UI designer and Framer developer.";
+  "UI design shots: screens, landing page details and motion from recent Framer website projects by Blessing Adewale (Teeblix), UX/UI and Framer designer.";
 
 export const metadata: Metadata = pageMetadata({ title: "Shots — UI Design & Motion", description: DESCRIPTION, path: "/shots" });
 
