@@ -32,7 +32,7 @@ export async function POST(req: Request) {
   const contact = await fetch("https://api.resend.com/contacts", {
     method: "POST",
     headers,
-    body: JSON.stringify({ email, firstName, lastName: rest.join(" "), unsubscribed: false }),
+    body: JSON.stringify({ email, first_name: firstName, last_name: rest.join(" "), unsubscribed: false }),
   });
   if (!contact.ok) console.error("[subscribe] Resend contact error:", contact.status, await contact.text());
 
