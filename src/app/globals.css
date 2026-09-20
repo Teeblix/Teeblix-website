@@ -214,6 +214,17 @@ select.field-input option {
   cursor: auto;
 }
 
+/* Home "Featured Projects" tag: the light-mode look in light and dark,
+   inverted (fg-1 fill, bg-1 text) in red. */
+.featured-label {
+  background: #fcfcfc;
+  color: #383838;
+}
+:root[data-theme="red"] .featured-label {
+  background: var(--fg-1);
+  color: var(--bg-1);
+}
+
 .scrollbar-none {
   scrollbar-width: none;
   -ms-overflow-style: none;
