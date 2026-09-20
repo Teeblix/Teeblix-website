@@ -8,9 +8,9 @@ import { ProjectsBrowser } from "@/components/projects/projects-browser";
 import { getAllProjects } from "@/lib/projects";
 
 const DESCRIPTION =
-  "Selected client websites and Framer Marketplace templates by Blessing Adewale (Teeblix): web design, UX/UI and Framer development across design studios, health, marketing, non-profit and more.";
+  "Framer website projects, landing pages and Framer Marketplace templates designed and built by Blessing Adewale (Teeblix) for design studios, health & wellness, marketing, non-profits, SaaS and personal portfolios.";
 
-export const metadata: Metadata = pageMetadata({ title: "Projects", description: DESCRIPTION, path: "/projects" });
+export const metadata: Metadata = pageMetadata({ title: "Projects — Framer Websites & Templates", description: DESCRIPTION, path: "/projects" });
 
 export default function ProjectsPage() {
   const projects = getAllProjects();
@@ -37,7 +37,7 @@ export default function ProjectsPage() {
             },
           })}
         />
-        <h1 className="sr-only">Projects: client websites and Framer templates designed and built by Blessing Adewale</h1>
+        <h1 className="sr-only">Framer website projects, landing pages and templates designed and built by Blessing Adewale</h1>
         <MobileNav />
 
         <FloatingNav />

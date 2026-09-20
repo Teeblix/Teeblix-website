@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
-import { pageMetadata, webPageJsonLd } from "@/lib/seo";
+import { pageMetadata, PERSON_ID, webPageJsonLd } from "@/lib/seo";
+import { WHAT_I_DO } from "@/lib/site-content";
 import { Sidebar } from "@/components/home/sidebar";
 import { LocationBadges } from "@/components/location-badges";
 import { MobileNav } from "@/components/nav/mobile-nav";
@@ -10,9 +11,13 @@ import { ContactForm } from "@/components/work/contact-form";
 import { PREFER_TO_TALK, WORK_LEAD } from "@/lib/work-content";
 
 const DESCRIPTION =
-  "Work with Blessing Adewale (Teeblix) on web design, UX/UI and Framer development: start a project through the form or book a free 30-minute discovery call.";
+  "Hire Blessing Adewale (Teeblix), freelance website designer and Framer developer: custom Framer websites, landing page design, Figma to Framer conversion, WordPress or Webflow to Framer migration. Start a project or book a free 30-minute discovery call.";
 
-export const metadata: Metadata = pageMetadata({ title: "Work With Me", description: DESCRIPTION, path: "/work-with-me" });
+export const metadata: Metadata = pageMetadata({
+  title: "Work With Me — Hire a Framer Developer & Website Designer",
+  description: DESCRIPTION,
+  path: "/work-with-me",
+});
 
 const EDGE_FADE = "linear-gradient(to bottom, transparent 0%, #000 5%, #000 95%, transparent 100%)";
 
@@ -36,8 +41,30 @@ export default function WorkWithMePage() {
   return (
     <PageTransition>
       <main className="relative mx-auto w-full max-w-[1920px] lg:flex lg:h-screen lg:overflow-hidden">
-        <JsonLd data={webPageJsonLd({ title: "Work With Me", description: DESCRIPTION, path: "/work-with-me", type: "ContactPage" })} />
-        <h1 className="sr-only">Work with me: start a web design or Framer development project, or book a free discovery call</h1>
+        <JsonLd
+          data={webPageJsonLd({
+            title: "Work With Me",
+            description: DESCRIPTION,
+            path: "/work-with-me",
+            type: "ContactPage",
+            extra: {
+              mainEntity: {
+                "@type": "Service",
+                name: "Website design and Framer development",
+                serviceType: "Web design, UX/UI design and Framer development",
+                provider: { "@id": PERSON_ID },
+                areaServed: "Worldwide",
+                availableChannel: { "@type": "ServiceChannel", serviceUrl: "https://teeblix.com/work-with-me" },
+                hasOfferCatalog: {
+                  "@type": "OfferCatalog",
+                  name: "Services",
+                  itemListElement: WHAT_I_DO.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s } })),
+                },
+              },
+            },
+          })}
+        />
+        <h1 className="sr-only">Hire a freelance Framer developer and website designer: start a project or book a free discovery call</h1>
         <MobileNav />
 
         <div className="hidden lg:block lg:w-[37%]">

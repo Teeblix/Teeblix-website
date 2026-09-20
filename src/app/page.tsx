@@ -16,12 +16,13 @@ export default function Home() {
       <main className="relative mx-auto w-full max-w-[1920px] lg:flex lg:h-screen lg:items-stretch lg:overflow-hidden">
         <JsonLd
           data={webPageJsonLd({
-            title: "Blessing Adewale (Teeblix) — Designer & Framer Developer",
-            description: "Portfolio of Blessing Adewale, an independent designer and Framer developer based in Nigeria.",
+            title: "Blessing Adewale (Teeblix) — Freelance Website Designer & Framer Developer",
+            description:
+              "Portfolio of Blessing Adewale (Teeblix), a freelance website designer and Framer developer based in Nigeria: custom Framer websites, landing pages and templates for clients worldwide.",
             path: "/",
           })}
         />
-        <h1 className="sr-only">Designer and Framer developer based in Nigeria, building websites for studios, founders and brands worldwide</h1>
+        <h1 className="sr-only">Freelance website designer and Framer developer based in Nigeria, building custom Framer websites, landing pages and templates for clients worldwide</h1>
         <MobileNav />
 
         <div className="hidden lg:block lg:w-[37%]">

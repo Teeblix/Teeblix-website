@@ -8,9 +8,9 @@ import { MobileNav } from "@/components/nav/mobile-nav";
 import { PageTransition } from "@/components/page-transition";
 
 const DESCRIPTION =
-  "About Blessing Adewale (Teeblix): an independent UX/UI designer and Framer developer based in Nigeria, working across websites, digital experiences and visual systems for clients worldwide.";
+  "About Blessing Adewale (Teeblix): a freelance UX/UI designer and Framer developer based in Nigeria, working with clients worldwide on Framer websites, landing pages, Figma to Framer conversion and WordPress or Webflow migrations.";
 
-export const metadata: Metadata = pageMetadata({ title: "About Me", description: DESCRIPTION, path: "/about-me" });
+export const metadata: Metadata = pageMetadata({ title: "About Me — UX/UI Designer & Framer Developer", description: DESCRIPTION, path: "/about-me" });
 
 function Badges() {
   return (
@@ -38,7 +38,7 @@ export default function AboutMePage() {
             extra: { mainEntity: { "@id": PERSON_ID } },
           })}
         />
-        <h1 className="sr-only">About Blessing Adewale: independent UX/UI designer and Framer developer based in Nigeria</h1>
+        <h1 className="sr-only">About Blessing Adewale: freelance UX/UI designer and Framer developer based in Nigeria, open to the world</h1>
         <MobileNav />
 
         <div className="hidden lg:block lg:w-[37%]">
