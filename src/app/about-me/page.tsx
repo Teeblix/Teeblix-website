@@ -53,7 +53,8 @@ export default function AboutMePage() {
             alt="Blessing Adewale"
             fill
             priority
-            sizes="63vw"
+            sizes="200vw"
+            quality={90}
             className="object-cover"
           />
           <Badges />
@@ -67,7 +68,8 @@ export default function AboutMePage() {
             alt="Blessing Adewale"
             fill
             priority
-            sizes="100vw"
+            sizes="200vw"
+            quality={90}
             className="object-cover md:hidden"
           />
           <Image
@@ -75,7 +77,8 @@ export default function AboutMePage() {
             alt="Blessing Adewale"
             fill
             priority
-            sizes="100vw"
+            sizes="200vw"
+            quality={90}
             className="hidden object-cover md:block"
           />
         </div>
