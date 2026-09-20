@@ -175,8 +175,9 @@ export default async function ProjectPage({ params }: Params) {
 
           {detail.large2 && <Banner src={detail.large2} alt={project.title} />}
 
+          {/* Two small images sit side by side; a lone one takes the full width (as in Framer). */}
           {smalls.length > 0 && (
-            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            <div className={`grid grid-cols-1 gap-3 ${smalls.length > 1 ? "lg:grid-cols-2" : ""}`}>
               {smalls.map((s) => (
                 <Banner key={s} src={s} alt={project.title} />
               ))}
