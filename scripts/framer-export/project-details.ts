@@ -1,4 +1,4 @@
-import type { ProjectDetail } from "./types";
+import type { ProjectDetail } from "../../src/lib/types";
 
 /**
  * TEMPORARY seed data exported 1:1 from the Framer CMS; to be replaced by the

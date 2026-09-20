@@ -1,4 +1,4 @@
-import type { Project } from "./types";
+import type { Project } from "../../src/lib/types";
 
 /**
  * TEMPORARY seed data, pulled 1:1 from the Framer CMS (same order) so the

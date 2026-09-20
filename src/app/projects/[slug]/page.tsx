@@ -7,8 +7,7 @@ import { MobileNav } from "@/components/nav/mobile-nav";
 import { PageTransition } from "@/components/page-transition";
 import { ArrowButton } from "@/components/projects/arrow-button";
 import { ParallaxCover } from "@/components/projects/parallax-cover";
-import { PROJECT_DETAILS } from "@/lib/project-details";
-import { getAllProjects } from "@/lib/projects";
+import { getAllProjects, getProject, getProjectSlugs } from "@/sanity/queries";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata, PERSON_ID, projectDescription, SITE_URL, webPageJsonLd } from "@/lib/seo";
 import { sized } from "@/lib/media";
@@ -17,18 +16,18 @@ interface Params {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return getAllProjects().map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getProjectSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const project = getAllProjects().find((p) => p.slug === slug);
-  const detail = PROJECT_DETAILS[slug];
-  if (!project || !detail) return {};
+  const data = await getProject(slug);
+  if (!data) return {};
+  const { project, detail, seoDescription } = data;
   return pageMetadata({
     title: project.title,
-    description: projectDescription(project, detail),
+    description: seoDescription?.trim() || projectDescription(project, detail),
     path: `/projects/${slug}`,
     image: sized(project.cover, 1200),
   });
@@ -91,10 +90,9 @@ function Row({ left, right, first = false }: { left?: React.ReactNode; right?: R
 
 export default async function ProjectPage({ params }: Params) {
   const { slug } = await params;
-  const all = getAllProjects();
-  const project = all.find((p) => p.slug === slug);
-  const detail = PROJECT_DETAILS[slug];
-  if (!project || !detail) notFound();
+  const [data, all] = await Promise.all([getProject(slug), getAllProjects()]);
+  if (!data) notFound();
+  const { project, detail } = data;
 
   const more = all.filter((p) => p.slug !== slug).slice(0, 4);
   const smalls = [detail.small1, detail.small2].filter((s): s is string => !!s);

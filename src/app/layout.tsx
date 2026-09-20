@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Fragment_Mono, Geist_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
@@ -43,7 +44,7 @@ try {
 } catch (e) {}
 `;
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"

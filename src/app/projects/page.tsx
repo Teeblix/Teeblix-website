@@ -5,15 +5,15 @@ import { FloatingNav } from "@/components/nav/floating-nav";
 import { MobileNav } from "@/components/nav/mobile-nav";
 import { PageTransition } from "@/components/page-transition";
 import { ProjectsBrowser } from "@/components/projects/projects-browser";
-import { getAllProjects } from "@/lib/projects";
+import { getAllProjects } from "@/sanity/queries";
 
 const DESCRIPTION =
   "Framer websites, landing pages and Framer Marketplace templates by Blessing Adewale (Teeblix) for studios, health & wellness, marketing, non-profits and SaaS.";
 
 export const metadata: Metadata = pageMetadata({ title: "Projects — Framer Websites & Templates", description: DESCRIPTION, path: "/projects" });
 
-export default function ProjectsPage() {
-  const projects = getAllProjects();
+export default async function ProjectsPage() {
+  const projects = await getAllProjects();
 
   return (
     <PageTransition>

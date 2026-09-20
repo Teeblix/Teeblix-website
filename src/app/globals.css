@@ -225,6 +225,13 @@ select.field-input option {
   color: var(--bg-1);
 }
 
+/* The embedded Sanity Studio needs normal selection behaviour. */
+.studio-root,
+.studio-root * {
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
 .scrollbar-none {
   scrollbar-width: none;
   -ms-overflow-style: none;

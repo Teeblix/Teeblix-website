@@ -4,12 +4,12 @@ import { HeroVideo } from "@/components/home/hero-video";
 import { FeaturedLabel } from "@/components/home/featured-label";
 import { FeaturedMasonry } from "@/components/home/featured-masonry";
 import { PageTransition } from "@/components/page-transition";
-import { getFeaturedProjects } from "@/lib/projects";
+import { getFeaturedProjects } from "@/sanity/queries";
 import { JsonLd } from "@/components/json-ld";
 import { webPageJsonLd } from "@/lib/seo";
 
-export default function Home() {
-  const featured = getFeaturedProjects(8);
+export default async function Home() {
+  const featured = await getFeaturedProjects(8);
 
   return (
     <PageTransition>

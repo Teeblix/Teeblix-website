@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ShotsWall } from "./shots-wall";
-import type { Shot } from "@/lib/shots-content";
+import type { Shot } from "@/lib/types";
 
 // Framer breakpoints: desktop/laptop ≥ 1200 (2 columns + scroll strip),
 // tablet 810–1199 (2 columns), phone < 810 (1 column).

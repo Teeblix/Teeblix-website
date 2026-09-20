@@ -5,7 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { createPortal } from "react-dom";
 import { LazyVideo } from "@/components/lazy-video";
 import { ScrollProgressText } from "@/components/about/scroll-progress-text";
-import type { Shot } from "@/lib/shots-content";
+import type { Shot } from "@/lib/types";
 
 interface Props {
   items: Shot[];
