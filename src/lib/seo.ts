@@ -65,7 +65,7 @@ export function siteJsonLd() {
         "Freelance website designer and Framer developer based in Nigeria, working with clients worldwide. Custom Framer websites, landing pages, Figma to Framer conversion, WordPress and Webflow to Framer migration, Framer templates and Framer commerce.",
       url: SITE_URL,
       email: `mailto:${EMAIL}`,
-      image: `${SITE_URL}/images/about/portrait-desktop.jpg`,
+      image: `${SITE_URL}/images/about/portrait-desktop-2.jpg`,
       address: { "@type": "PostalAddress", addressCountry: "NG" },
       knowsAbout: [
         "Web design",

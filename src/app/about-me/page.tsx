@@ -49,7 +49,7 @@ export default function AboutMePage() {
 
         <div className="relative hidden lg:block lg:h-screen lg:w-[63%]">
           <Image
-            src="/images/about/portrait-desktop.jpg"
+            src="/images/about/portrait-desktop-2.jpg"
             alt="Blessing Adewale"
             fill
             priority
@@ -63,7 +63,7 @@ export default function AboutMePage() {
           box, which starts 75% down the screen, scrolls up over the photo. */}
         <div className="fixed inset-0 lg:hidden">
           <Image
-            src="/images/about/portrait-mobile.jpg"
+            src="/images/about/portrait-mobile-2.jpg"
             alt="Blessing Adewale"
             fill
             priority
@@ -71,7 +71,7 @@ export default function AboutMePage() {
             className="object-cover md:hidden"
           />
           <Image
-            src="/images/about/portrait-desktop.jpg"
+            src="/images/about/portrait-desktop-2.jpg"
             alt="Blessing Adewale"
             fill
             priority
