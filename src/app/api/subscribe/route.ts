@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 
 const TO = process.env.CONTACT_TO_EMAIL ?? "projects@teeblix.com";
 const FROM = process.env.CONTACT_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>";
-// Optional: a Resend audience to add subscribers to (Resend → Audiences).
-const AUDIENCE = process.env.RESEND_AUDIENCE_ID;
 
 const escapeHtml = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -28,15 +26,15 @@ export async function POST(req: Request) {
   }
   const headers = { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" };
 
-  if (AUDIENCE) {
-    const [firstName, ...rest] = name.split(/\s+/);
-    const res = await fetch(`https://api.resend.com/audiences/${AUDIENCE}/contacts`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ email, first_name: firstName, last_name: rest.join(" "), unsubscribed: false }),
-    });
-    if (!res.ok) console.error("[subscribe] Resend audience error:", res.status, await res.text());
-  }
+  // Add to the Resend Audience (Resend → Audience → Contacts), which is also
+  // what Broadcasts send to. A failure here shouldn't block the notification.
+  const [firstName, ...rest] = name.split(/\s+/);
+  const contact = await fetch("https://api.resend.com/contacts", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ email, firstName, lastName: rest.join(" "), unsubscribed: false }),
+  });
+  if (!contact.ok) console.error("[subscribe] Resend contact error:", contact.status, await contact.text());
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
