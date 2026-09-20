@@ -133,3 +133,23 @@ export function webPageJsonLd({
     ...extra,
   };
 }
+
+/**
+ * Meta description for a project page, composed from the structured CMS
+ * fields (type, industry, services) rather than the free-text summary, and
+ * phrased around the searched terms ("Framer template", "Framer website",
+ * "Framer Marketplace"). Kept within 160 characters.
+ */
+export function projectDescription(p: { title: string; industry: string }, d: { type: string; services: string[] }): string {
+  const industry = p.industry.replace(/\b(?!UX|UI|US|DOT)([A-Z])([a-z]+)/g, (_, a, b) => a.toLowerCase() + b);
+  const isTemplate = /template/i.test(d.type);
+  const services = d.services
+    .filter((s) => !/framer template/i.test(s))
+    .map((s) => s.replace(/\b(?!UX|UI|CMS|Framer)([A-Z])([a-z]+)/g, (_, a, b) => a.toLowerCase() + b))
+    .join(", ");
+  const base = isTemplate
+    ? `${p.title}: a ${industry} Framer template by Blessing Adewale (Teeblix), available on the Framer Marketplace`
+    : `${p.title}: ${industry} website designed and built in Framer by Blessing Adewale (Teeblix)`;
+  const full = `${base} — ${services}.`;
+  return full.length <= 160 ? full : `${base}.`;
+}

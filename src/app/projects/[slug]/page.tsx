@@ -10,7 +10,7 @@ import { ParallaxCover } from "@/components/projects/parallax-cover";
 import { PROJECT_DETAILS } from "@/lib/project-details";
 import { getAllProjects } from "@/lib/projects";
 import { JsonLd } from "@/components/json-ld";
-import { pageMetadata, PERSON_ID, SITE_URL, webPageJsonLd } from "@/lib/seo";
+import { pageMetadata, PERSON_ID, projectDescription, SITE_URL, webPageJsonLd } from "@/lib/seo";
 import { sized } from "@/lib/media";
 
 interface Params {
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!project || !detail) return {};
   return pageMetadata({
     title: project.title,
-    description: `${project.title} (${project.industry}, ${project.year}): ${detail.description}`.slice(0, 300),
+    description: projectDescription(project, detail),
     path: `/projects/${slug}`,
     image: sized(project.cover, 1200),
   });
