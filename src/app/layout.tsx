@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Fragment_Mono, Geist_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata, SITE_URL, siteJsonLd } from "@/lib/seo";
 import "./globals.css";
@@ -55,6 +57,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full antialiased">
         <ThemeProvider>{children}</ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
