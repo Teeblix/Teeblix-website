@@ -9,7 +9,7 @@ export const ROLE = "Designer & Framer Developer";
 /** Stamped at build time; used as dateModified in JSON-LD and lastmod in the sitemap. */
 export const LAST_UPDATED = new Date().toISOString();
 
-const OG_IMAGE = { url: "/og.png", width: 1200, height: 630, alt: `${PERSON_NAME} (${SITE_NAME}) — ${ROLE}` };
+const OG_IMAGE = { url: "/og.jpg", width: 1200, height: 630, alt: `${PERSON_NAME} (${SITE_NAME}) — ${ROLE}` };
 
 interface PageMeta {
   title: string;
