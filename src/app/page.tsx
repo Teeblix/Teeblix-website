@@ -5,6 +5,8 @@ import { FeaturedLabel } from "@/components/home/featured-label";
 import { FeaturedMasonry } from "@/components/home/featured-masonry";
 import { PageTransition } from "@/components/page-transition";
 import { getFeaturedProjects } from "@/lib/projects";
+import { JsonLd } from "@/components/json-ld";
+import { webPageJsonLd } from "@/lib/seo";
 
 export default function Home() {
   const featured = getFeaturedProjects(8);
@@ -12,6 +14,14 @@ export default function Home() {
   return (
     <PageTransition>
       <main className="relative mx-auto w-full max-w-[1920px] lg:flex lg:h-screen lg:items-stretch lg:overflow-hidden">
+        <JsonLd
+          data={webPageJsonLd({
+            title: "Blessing Adewale (Teeblix) — Designer & Framer Developer",
+            description: "Portfolio of Blessing Adewale, an independent designer and Framer developer based in Nigeria.",
+            path: "/",
+          })}
+        />
+        <h1 className="sr-only">Designer and Framer developer based in Nigeria, building websites for studios, founders and brands worldwide</h1>
         <MobileNav />
 
         <div className="hidden lg:block lg:w-[37%]">

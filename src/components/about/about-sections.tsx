@@ -6,9 +6,9 @@ import { EMAIL, WHAT_I_DO } from "@/lib/site-content";
 
 function Heading({ children }: { children: string }) {
   return (
-    <span className="text-xs uppercase" style={{ color: "var(--fg-2)" }}>
+    <h2 className="text-xs font-normal uppercase" style={{ color: "var(--fg-2)" }}>
       {children}
-    </span>
+    </h2>
   );
 }
 

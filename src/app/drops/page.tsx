@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { pageMetadata, webPageJsonLd } from "@/lib/seo";
 import { SubscribeForm } from "@/components/drops/subscribe-form";
 import { FloatingNav } from "@/components/nav/floating-nav";
 import { MobileNav } from "@/components/nav/mobile-nav";
 import { PageTransition } from "@/components/page-transition";
 
-export const metadata: Metadata = {
-  title: "Drops — Blessing Adewale (Teeblix)",
-  description: "Drops is coming soon. Subscribe to get the first one in your inbox.",
-};
+const DESCRIPTION =
+  "Drops is the newsletter from Blessing Adewale (Teeblix): the work and the thinking behind it, straight to your inbox. Subscribe to get the first one.";
+
+export const metadata: Metadata = pageMetadata({ title: "Drops", description: DESCRIPTION, path: "/drops" });
 
 export default function DropsPage() {
   return (
     <PageTransition>
       <main className="relative mx-auto flex min-h-screen w-full max-w-[1920px] flex-col justify-center px-6 pt-[200px] pb-10 md:px-8 md:pt-[150px] lg:py-[200px]">
+        <JsonLd data={webPageJsonLd({ title: "Drops", description: DESCRIPTION, path: "/drops" })} />
         <MobileNav />
         <FloatingNav />
 

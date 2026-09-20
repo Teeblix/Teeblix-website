@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { pageMetadata, PERSON_ID, webPageJsonLd } from "@/lib/seo";
 import Image from "next/image";
 import { AboutSections } from "@/components/about/about-sections";
 import { AboutSidebar } from "@/components/about/about-sidebar";
 import { MobileNav } from "@/components/nav/mobile-nav";
 import { PageTransition } from "@/components/page-transition";
 
-export const metadata: Metadata = {
-  title: "About Me — Blessing Adewale (Teeblix)",
-  description:
-    "Independent UX/UI designer and Framer developer working across websites, digital experiences, and visual systems.",
-};
+const DESCRIPTION =
+  "About Blessing Adewale (Teeblix): an independent UX/UI designer and Framer developer based in Nigeria, working across websites, digital experiences and visual systems for clients worldwide.";
+
+export const metadata: Metadata = pageMetadata({ title: "About Me", description: DESCRIPTION, path: "/about-me" });
 
 function Badges() {
   return (
@@ -28,6 +29,16 @@ export default function AboutMePage() {
   return (
     <PageTransition>
       <main className="relative mx-auto w-full max-w-[1920px] lg:flex lg:h-screen lg:overflow-hidden">
+        <JsonLd
+          data={webPageJsonLd({
+            title: "About Me",
+            description: DESCRIPTION,
+            path: "/about-me",
+            type: "ProfilePage",
+            extra: { mainEntity: { "@id": PERSON_ID } },
+          })}
+        />
+        <h1 className="sr-only">About Blessing Adewale: independent UX/UI designer and Framer developer based in Nigeria</h1>
         <MobileNav />
 
         <div className="hidden lg:block lg:w-[37%]">

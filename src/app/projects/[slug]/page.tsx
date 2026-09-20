@@ -9,6 +9,9 @@ import { ArrowButton } from "@/components/projects/arrow-button";
 import { ParallaxCover } from "@/components/projects/parallax-cover";
 import { PROJECT_DETAILS } from "@/lib/project-details";
 import { getAllProjects } from "@/lib/projects";
+import { JsonLd } from "@/components/json-ld";
+import { pageMetadata, PERSON_ID, SITE_URL, webPageJsonLd } from "@/lib/seo";
+import { sized } from "@/lib/media";
 
 interface Params {
   params: Promise<{ slug: string }>;
@@ -23,7 +26,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const project = getAllProjects().find((p) => p.slug === slug);
   const detail = PROJECT_DETAILS[slug];
   if (!project || !detail) return {};
-  return { title: `${project.title} — Blessing Adewale (Teeblix)`, description: detail.description };
+  return pageMetadata({
+    title: project.title,
+    description: `${project.title} (${project.industry}, ${project.year}): ${detail.description}`.slice(0, 300),
+    path: `/projects/${slug}`,
+    image: sized(project.cover, 1200),
+  });
 }
 
 function Label({ children }: { children: string }) {
@@ -51,9 +59,9 @@ function TextBlock({ title, lines }: { title: string; lines: string[] }) {
   if (!lines.length) return null;
   return (
     <div className="flex flex-col gap-[60px]">
-      <span className="text-xs uppercase" style={{ color: "var(--fg-2)" }}>
+      <h2 className="text-xs font-normal uppercase" style={{ color: "var(--fg-2)" }}>
         {title}
-      </span>
+      </h2>
       <div className="flex max-w-[600px] flex-col gap-4 text-xs uppercase" style={{ color: "var(--fg-1)" }}>
         {lines.map((l) => (
           <p key={l.slice(0, 40)}>{l}</p>
@@ -99,6 +107,28 @@ export default async function ProjectPage({ params }: Params) {
         <MobileNav />
 
         <FloatingNav />
+        <JsonLd
+          data={webPageJsonLd({
+            title: project.title,
+            description: detail.description,
+            path: `/projects/${slug}`,
+            type: "ItemPage",
+            extra: {
+              mainEntity: {
+                "@type": "CreativeWork",
+                name: project.title,
+                description: detail.description,
+                genre: project.industry,
+                dateCreated: String(project.year),
+                image: sized(project.cover, 1200),
+                creator: { "@id": PERSON_ID },
+                keywords: [detail.type, ...detail.services, ...detail.tools].join(", "),
+                ...(detail.website ? { sameAs: detail.website } : {}),
+                url: `${SITE_URL}/projects/${slug}`,
+              },
+            },
+          })}
+        />
 
         {/* Hero: full-screen parallax cover with the title bar along the bottom */}
         <section className="relative h-screen w-full">
@@ -109,9 +139,9 @@ export default async function ProjectPage({ params }: Params) {
             className="absolute inset-x-3 bottom-[30px] flex items-center gap-[15px] p-1 uppercase md:inset-x-8"
             style={{ background: "var(--bg-1)" }}
           >
-            <span className="shrink-0 text-[13px] font-medium leading-[1.3]" style={{ color: "var(--fg-1)" }}>
+            <h1 className="shrink-0 text-[13px] font-medium leading-[1.3]" style={{ color: "var(--fg-1)" }}>
               {project.title}
-            </span>
+            </h1>
             <span className="flex flex-1 justify-end gap-[30px] text-xs" style={{ color: "var(--fg-2)" }}>
               <span className="truncate">{project.industry}</span>
               <span className="shrink-0">{project.year}</span>

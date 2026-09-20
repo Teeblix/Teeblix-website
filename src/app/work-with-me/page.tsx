@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { pageMetadata, webPageJsonLd } from "@/lib/seo";
 import { Sidebar } from "@/components/home/sidebar";
 import { LocationBadges } from "@/components/location-badges";
 import { MobileNav } from "@/components/nav/mobile-nav";
@@ -7,10 +9,10 @@ import { CalScheduler } from "@/components/work/cal-scheduler";
 import { ContactForm } from "@/components/work/contact-form";
 import { PREFER_TO_TALK, WORK_LEAD } from "@/lib/work-content";
 
-export const metadata: Metadata = {
-  title: "Work With Me — Blessing Adewale (Teeblix)",
-  description: "Start a project or book a free 30-minute discovery call.",
-};
+const DESCRIPTION =
+  "Work with Blessing Adewale (Teeblix) on web design, UX/UI and Framer development: start a project through the form or book a free 30-minute discovery call.";
+
+export const metadata: Metadata = pageMetadata({ title: "Work With Me", description: DESCRIPTION, path: "/work-with-me" });
 
 const EDGE_FADE = "linear-gradient(to bottom, transparent 0%, #000 5%, #000 95%, transparent 100%)";
 
@@ -34,6 +36,8 @@ export default function WorkWithMePage() {
   return (
     <PageTransition>
       <main className="relative mx-auto w-full max-w-[1920px] lg:flex lg:h-screen lg:overflow-hidden">
+        <JsonLd data={webPageJsonLd({ title: "Work With Me", description: DESCRIPTION, path: "/work-with-me", type: "ContactPage" })} />
+        <h1 className="sr-only">Work with me: start a web design or Framer development project, or book a free discovery call</h1>
         <MobileNav />
 
         <div className="hidden lg:block lg:w-[37%]">

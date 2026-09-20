@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { pageMetadata, webPageJsonLd } from "@/lib/seo";
 import Image from "next/image";
 import { Sidebar } from "@/components/home/sidebar";
 import { LocationBadges } from "@/components/location-badges";
@@ -7,15 +9,17 @@ import { PageTransition } from "@/components/page-transition";
 import { ShotsWallResponsive } from "@/components/shots/shots-wall-responsive";
 import { SHOTS } from "@/lib/shots-content";
 
-export const metadata: Metadata = {
-  title: "Shots — Blessing Adewale (Teeblix)",
-  description: "Selected shots and motion from recent work.",
-};
+const DESCRIPTION =
+  "A wall of shots: selected screens, details and motion from recent website and Framer projects by Blessing Adewale (Teeblix).";
+
+export const metadata: Metadata = pageMetadata({ title: "Shots", description: DESCRIPTION, path: "/shots" });
 
 export default function ShotsPage() {
   return (
     <PageTransition>
       <main className="relative mx-auto h-screen w-full max-w-[1920px] overflow-hidden lg:flex">
+        <JsonLd data={webPageJsonLd({ title: "Shots", description: DESCRIPTION, path: "/shots", type: "CollectionPage" })} />
+        <h1 className="sr-only">Shots: selected screens, details and motion from recent design and Framer work</h1>
         <MobileNav />
 
         <div className="hidden lg:block lg:w-[37%]">

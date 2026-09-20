@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Fragment_Mono, Geist_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { JsonLd } from "@/components/json-ld";
+import { pageMetadata, SITE_URL, siteJsonLd } from "@/lib/seo";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -20,8 +22,14 @@ const fragmentMono = Fragment_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Blessing Adewale (Teeblix) — Designer & Framer Developer",
-  description: "Designer & Framer developer based in Nigeria, open to the world.",
+  metadataBase: new URL(SITE_URL),
+  ...pageMetadata({
+    title: "Home",
+    path: "/",
+    description:
+      "Blessing Adewale (Teeblix) is an independent designer and Framer developer based in Nigeria, building websites and digital experiences for studios, founders and brands worldwide.",
+  }),
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
 };
 
 // Applied before hydration so the stored theme choice never flashes the
@@ -43,6 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <JsonLd data={siteJsonLd()} />
       </head>
       <body className="min-h-full antialiased">
         <ThemeProvider>{children}</ThemeProvider>
