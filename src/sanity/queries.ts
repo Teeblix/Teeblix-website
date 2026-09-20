@@ -106,6 +106,14 @@ export async function getShots(): Promise<Shot[]> {
     ["shot"]
   );
   return rows
-    .filter((r) => r.image)
-    .map((r) => ({ name: r.name, year: r.year, width: r.image!.w, height: r.image!.h, image: r.image!.url, video: r.video ?? undefined }));
+    .filter((r) => r.image || r.video)
+    .map((r) => ({
+      name: r.name,
+      year: r.year,
+      // A video without a poster gets a provisional 16:9; the wall re-measures it from the video's metadata.
+      width: r.image?.w ?? 16,
+      height: r.image?.h ?? 9,
+      image: r.image?.url,
+      video: r.video ?? undefined,
+    }));
 }

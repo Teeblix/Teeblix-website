@@ -62,8 +62,13 @@ export function ShotsWall({
     return () => ro.disconnect();
   }, []);
 
+  // Video shots without a poster arrive with a provisional size; once their
+  // metadata loads we swap in the real dimensions and re-flow the wall.
+  const [measured, setMeasured] = useState<Record<number, { width: number; height: number }>>({});
+  const sizedItems = useMemo(() => items.map((it, i) => (measured[i] ? { ...it, ...measured[i] } : it)), [items, measured]);
+
   const gridW = Math.max(120, size.w - (scrollText ? STRIP_WIDTH + gap : 0));
-  const layout = useMemo(() => layoutMasonry(items, gridW, columns, gap), [items, gridW, columns, gap]);
+  const layout = useMemo(() => layoutMasonry(sizedItems, gridW, columns, gap), [sizedItems, gridW, columns, gap]);
 
   // ---- lightbox ----
   const [lb, setLb] = useState<number | null>(null);
@@ -95,7 +100,7 @@ export function ShotsWall({
 
   const tileSizes = columns === 1 ? "100vw" : scrollText ? "32vw" : "50vw";
 
-  const media = (it: Shot, inLightbox: boolean) => {
+  const media = (it: Shot, inLightbox: boolean, index = -1) => {
     if (inLightbox) {
       const style: CSSProperties = { display: "block", width: "auto", height: "auto", maxWidth: "80vw", maxHeight: "82vh", objectFit: "contain" };
       return it.video ? (
@@ -106,7 +111,23 @@ export function ShotsWall({
       );
     }
     if (it.video) {
-      return <LazyVideo src={it.video} poster={it.image} className="pointer-events-none block h-full w-full object-cover" />;
+      const needsMeasure = !it.image && index >= 0 && !measured[index];
+      return (
+        <LazyVideo
+          src={it.video}
+          poster={it.image}
+          eagerMetadata={!it.image}
+          onLoadedMetadata={
+            needsMeasure
+              ? (e) => {
+                  const v = e.currentTarget;
+                  if (v.videoWidth && v.videoHeight) setMeasured((m) => ({ ...m, [index]: { width: v.videoWidth, height: v.videoHeight } }));
+                }
+              : undefined
+          }
+          className="pointer-events-none block h-full w-full object-cover"
+        />
+      );
     }
     return <Image src={it.image!} alt={it.name} fill sizes={tileSizes} className="pointer-events-none object-cover" />;
   };
@@ -134,7 +155,7 @@ export function ShotsWall({
               >
                 <div className="shot-m absolute inset-0">
                   <div style={{ position: "relative", width: "100%", height: "100%", transition: "transform 0.5s cubic-bezier(0.22,1,0.36,1)" }}>
-                    {media(it, false)}
+                    {media(it, false, i)}
                   </div>
                 </div>
                 <div
