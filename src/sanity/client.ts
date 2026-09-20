@@ -1,7 +1,9 @@
 import { createClient } from "next-sanity";
 import { apiVersion, dataset, projectId } from "./env";
 
-export const client = createClient({ projectId, dataset, apiVersion, useCdn: true });
+// Next caches every query itself (tagged, see below), so read straight from the
+// API rather than Sanity's CDN — otherwise a publish can serve stale data for a minute.
+export const client = createClient({ projectId, dataset, apiVersion, useCdn: false });
 
 /**
  * Fetch with Next's data cache, tagged so the Sanity webhook can revalidate
