@@ -31,9 +31,16 @@ interface Props {
   aspect?: number;
   /** Rendered width hint for responsive image selection (CSS `sizes`). */
   sizes?: string;
+  /** Above-the-fold card: preload its cover (LCP) instead of lazy-loading. */
+  priority?: boolean;
 }
 
-export function FeaturedProjectCard({ project, aspect, sizes = "(min-width: 1200px) 33vw, (min-width: 810px) 50vw, 100vw" }: Props) {
+export function FeaturedProjectCard({
+  project,
+  aspect,
+  sizes = "(min-width: 1200px) 33vw, (min-width: 810px) 50vw, 100vw",
+  priority = false,
+}: Props) {
   const [hovered, setHovered] = useState(false);
   const [displayIndustry, setDisplayIndustry] = useState(project.industry);
   const frameRef = useRef<number | undefined>(undefined);
@@ -82,6 +89,7 @@ export function FeaturedProjectCard({ project, aspect, sizes = "(min-width: 1200
             alt={project.title}
             fill
             sizes={sizes}
+            priority={priority}
             className="object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.06]"
           />
         )}

@@ -13,8 +13,8 @@ function Columns({ projects, columns }: { projects: Project[]; columns: number }
       {cols.map((col, c) => (
         <Marquee key={c} speed={90} gap={20} pauseOnHover={false} style={{ height: "100%", flex: 1, minWidth: 0 }}>
           <div className="flex flex-col gap-5">
-            {col.map((project) => (
-              <FeaturedProjectCard key={project.slug} project={project} />
+            {col.map((project, i) => (
+              <FeaturedProjectCard key={project.slug} project={project} priority={i === 0} sizes="(min-width: 810px) 32vw, 100vw" />
             ))}
           </div>
         </Marquee>
