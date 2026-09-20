@@ -20,8 +20,8 @@ export const SHOTS: Shot[] = [
   {
     name: "Willow Grace",
     year: "2025",
-    width: 1080,
-    height: 1788,
+    width: 1788,
+    height: 1080,
     video: "/videos/shots/willow-grace.mp4",
     image: "/images/shots/willow-grace-poster.jpg",
   },
@@ -33,8 +33,8 @@ export const SHOTS: Shot[] = [
   {
     name: "Vooks",
     year: "2026",
-    width: 1080,
-    height: 1440,
+    width: 1440,
+    height: 1080,
     video: "/videos/shots/vooks-2.mp4",
     image: "/images/shots/vooks-2-poster.jpg",
   },
