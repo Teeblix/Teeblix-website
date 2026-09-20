@@ -116,6 +116,8 @@ export function ShotsWall({
       <style>{`
         .shot-c:hover .shot-m > * { transform: scale(${hoverZoom}); }
         .shot-c:hover .shot-y { opacity: 0.62 !important; transform: translateX(0) !important; }
+        /* No hover on tablet / phone, so the year is always shown there. */
+        @media (max-width: 1199px) { .shot-y { opacity: 0.62 !important; transform: none !important; } }
       `}</style>
 
       <div ref={scrollRef} className="scrollbar-none absolute inset-0 overflow-x-hidden overflow-y-auto">
