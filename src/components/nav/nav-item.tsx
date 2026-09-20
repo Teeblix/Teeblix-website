@@ -43,7 +43,7 @@ export function NavItem({ title, href, onClick, active, newTab = false, speed = 
       )}
     </>
   );
-  const classes = `relative inline-flex items-center whitespace-nowrap ${className ?? ""}`;
+  const classes = `relative inline-flex w-fit items-center self-start whitespace-nowrap ${className ?? ""}`;
   const style = { color: "var(--fg-1)", transition: "color 0.2s ease" } as const;
 
   if (!href) {
