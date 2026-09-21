@@ -43,9 +43,6 @@ try {
   var t = window.localStorage.getItem("teeblix-theme");
   document.documentElement.setAttribute("data-theme", t === "light" || t === "red" ? t : "dark");
 } catch (e) {}
-try {
-  if (window.sessionStorage.getItem("teeblix-preloaded") === "1") document.documentElement.setAttribute("data-visited", "");
-} catch (e) {}
 `;
 
 export default function RootLayout({ children }: { children: ReactNode }) {

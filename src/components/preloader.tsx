@@ -4,36 +4,50 @@ import { useEffect, useState } from "react";
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const LINES = ["TEEBLIX PORTFOLIO - 2026", "DESIGNER - FRAMER DEVELOPER"];
-const SESSION_KEY = "teeblix-preloaded";
 const SCRAMBLE_MS = 1100; // how long each line takes to resolve
 const HOLD_MS = 650; // pause on the resolved line
 const TICK_MS = 30;
+const EXIT_MS = 400;
+const EVENT = "teeblix:preloader";
+
+/** Replays the preloader (used by the name/home link). */
+export function runPreloader() {
+  window.dispatchEvent(new Event(EVENT));
+}
 
 /**
- * First-visit preloader (from the Framer home canvas): the page background
- * with one line of 12px mono text centred. The text scrambles into
+ * Preloader from the Framer home canvas: the page background with one line
+ * of 12px mono text centred. The text scrambles into
  * "TEEBLIX PORTFOLIO - 2026", holds, scrambles again into
  * "DESIGNER - FRAMER DEVELOPER", then the whole screen pushes up and the
  * page slides in underneath — the same move as the page transitions.
  *
- * Shown once per browser session; `layout.tsx` hides it before hydration on
- * later loads (see the inline script there).
+ * Runs on every page load and whenever `runPreloader()` is called.
  */
 export function Preloader() {
   const [text, setText] = useState("");
   const [phase, setPhase] = useState<"run" | "leave" | "done">("run");
+  const [runId, setRunId] = useState(0);
 
   useEffect(() => {
-    let visited = false;
-    try {
-      visited = sessionStorage.getItem(SESSION_KEY) === "1";
-    } catch {}
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (visited || reduce) {
+    const replay = () => {
+      setText("");
+      setPhase("run");
+      setRunId((n) => n + 1);
+    };
+    window.addEventListener(EVENT, replay);
+    return () => window.removeEventListener(EVENT, replay);
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setPhase("done");
       return;
     }
-    document.documentElement.classList.add("preloading");
+    const root = document.documentElement;
+    const site = () => document.querySelector(".site-root");
+    root.classList.add("preloading");
+    site()?.classList.remove("site-enter");
 
     let timer = 0;
     let cancelled = false;
@@ -68,24 +82,21 @@ export function Preloader() {
         await wait(HOLD_MS);
       }
       if (cancelled) return;
-      try {
-        sessionStorage.setItem(SESSION_KEY, "1");
-      } catch {}
       setPhase("leave");
-      document.querySelector(".site-root")?.classList.add("site-enter");
-      await wait(420);
-      document.documentElement.classList.remove("preloading");
-      document.querySelector(".site-root")?.classList.remove("site-enter");
+      site()?.classList.add("site-enter");
+      await wait(EXIT_MS + 20);
+      root.classList.remove("preloading");
+      site()?.classList.remove("site-enter");
       setPhase("done");
     })();
 
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
-      document.documentElement.classList.remove("preloading");
-      document.querySelector(".site-root")?.classList.remove("site-enter");
+      root.classList.remove("preloading");
+      site()?.classList.remove("site-enter");
     };
-  }, []);
+  }, [runId]);
 
   if (phase === "done") return null;
 
