@@ -103,7 +103,7 @@ export function Preloader() {
   return (
     <div
       className={`preloader fixed inset-0 z-[100] flex items-center justify-center text-xs uppercase leading-[1.3] ${phase === "leave" ? "preloader-leave" : ""}`}
-      style={{ background: "var(--bg-1)", color: "var(--fg-1)" }}
+      style={{ background: "var(--bg-1)", color: "#e63312" }}
       aria-hidden="true"
     >
       <span className="whitespace-pre">{text}</span>
