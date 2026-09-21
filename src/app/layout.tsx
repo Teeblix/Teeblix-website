@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { JsonLd } from "@/components/json-ld";
+import { Preloader } from "@/components/preloader";
 import { pageMetadata, SITE_URL, siteJsonLd } from "@/lib/seo";
 import "./globals.css";
 
@@ -42,6 +43,9 @@ try {
   var t = window.localStorage.getItem("teeblix-theme");
   document.documentElement.setAttribute("data-theme", t === "light" || t === "red" ? t : "dark");
 } catch (e) {}
+try {
+  if (window.sessionStorage.getItem("teeblix-preloaded") === "1") document.documentElement.setAttribute("data-visited", "");
+} catch (e) {}
 `;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -57,7 +61,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <JsonLd data={siteJsonLd()} />
       </head>
       <body className="min-h-full antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <Preloader />
+        {/* Wrapper so the preloader can push the whole page in without transforming <body> (which would drag the fixed preloader along). */}
+        <div className="site-root">
+          <ThemeProvider>{children}</ThemeProvider>
+        </div>
         <Analytics />
         <SpeedInsights />
       </body>

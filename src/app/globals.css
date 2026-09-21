@@ -104,6 +104,13 @@ body {
 ::view-transition-new(root) {
   animation: 0.4s cubic-bezier(0.27, 0, 0.51, 1) both push-up-in;
 }
+/* First-visit preloader: hidden pre-hydration on later loads in the same
+   session; pushes up with the page-transition curve when it's done. */
+html[data-visited] .preloader { display: none; }
+html.preloading { overflow: hidden; }
+.preloader-leave { animation: 0.4s cubic-bezier(0.27, 0, 0.51, 1) both push-up-out; }
+.site-root.site-enter { animation: 0.4s cubic-bezier(0.27, 0, 0.51, 1) both push-up-in; }
+
 @keyframes push-up-out {
   from {
     transform: translateY(0);
