@@ -16,7 +16,7 @@ export default async function Home() {
       <main className="relative mx-auto w-full max-w-[1920px] lg:flex lg:h-screen lg:items-stretch lg:overflow-hidden">
         <JsonLd
           data={webPageJsonLd({
-            title: "Blessing Adewale (Teeblix) — Freelance Website Designer & Framer Developer",
+            title: "Blessing Adewale (Teeblix) - Independent Designer, Framer Developer",
             description:
               "Portfolio of Blessing Adewale (Teeblix), a freelance website designer and Framer developer based in Nigeria: custom Framer websites, landing pages and templates for clients worldwide.",
             path: "/",

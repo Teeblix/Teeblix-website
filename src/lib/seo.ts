@@ -6,7 +6,7 @@ export const SITE_NAME = "Teeblix";
 export const PERSON_NAME = "Blessing Adewale";
 export const ROLE = "Designer & Framer Developer";
 /** Search-facing role phrasing (from keyword research): used in titles/descriptions, not the visible tagline. */
-export const SEO_ROLE = "Freelance Website Designer & Framer Developer";
+export const SEO_ROLE = "Independent Designer, Framer Developer";
 
 /** Stamped at build time; used as dateModified in JSON-LD and lastmod in the sitemap. */
 export const LAST_UPDATED = new Date().toISOString();
@@ -23,7 +23,7 @@ interface PageMeta {
 
 /** Shared per-page metadata: canonical URL, Open Graph and Twitter card. */
 export function pageMetadata({ title, description, path, image }: PageMeta): Metadata {
-  const fullTitle = path === "/" ? `${PERSON_NAME} (${SITE_NAME}) — ${SEO_ROLE}` : `${title} — ${PERSON_NAME} (${SITE_NAME})`;
+  const fullTitle = path === "/" ? `${PERSON_NAME} (${SITE_NAME}) - ${SEO_ROLE}` : `${title} — ${PERSON_NAME} (${SITE_NAME})`;
   const images = image ? [{ url: image, width: 1200, height: 630, alt: title }] : [OG_IMAGE];
   return {
     title: fullTitle,
