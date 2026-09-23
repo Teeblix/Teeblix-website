@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title: "Home",
     path: "/",
     description:
-      "Freelance website designer & Framer developer: Framer websites, landing pages, Figma to Framer, WordPress & Webflow migration, templates.",
+      "I design and build high-quality Framer websites, landing pages and digital experiences for ambitious brands, agencies and businesses worldwide. Based in Nigeria, working globally.",
   }),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
 };
