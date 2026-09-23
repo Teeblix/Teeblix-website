@@ -78,6 +78,7 @@ export default function WorkWithMePage() {
             {WORK_LEAD}
           </p>
           <div
+            data-lenis-prevent
             className="scrollbar-none absolute inset-x-5 top-[182px] bottom-0 flex flex-col gap-10 overflow-y-auto py-10"
             style={{ maskImage: EDGE_FADE, WebkitMaskImage: EDGE_FADE }}
           >

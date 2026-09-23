@@ -7,7 +7,7 @@ import { EMAIL, INDUSTRIES, QUOTE, SOCIALS, WHAT_I_DO } from "@/lib/site-content
 
 export function Sidebar() {
   return (
-    <aside className="flex w-full flex-col justify-between gap-10 p-8 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+    <aside data-lenis-prevent className="flex w-full flex-col justify-between gap-10 p-8 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
       <div className="flex flex-col gap-10">
         <NavBar />
 

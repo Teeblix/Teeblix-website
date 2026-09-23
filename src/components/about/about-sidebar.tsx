@@ -21,6 +21,7 @@ export function AboutSidebar({ children }: { children: ReactNode }) {
       <div className="relative mt-[38px] min-h-0 flex-1">
         <div
           ref={scrollRef}
+          data-lenis-prevent
           className="scrollbar-none h-full overflow-y-auto"
           style={{ padding: "30px 32px 0", maskImage: EDGE_FADE, WebkitMaskImage: EDGE_FADE }}
         >

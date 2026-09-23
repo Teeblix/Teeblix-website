@@ -141,7 +141,7 @@ export function ShotsWall({
         @media (max-width: 1199px) { .shot-y { opacity: 0.62 !important; transform: none !important; } }
       `}</style>
 
-      <div ref={scrollRef} className="scrollbar-none absolute inset-0 overflow-x-hidden overflow-y-auto">
+      <div ref={scrollRef} data-lenis-prevent className="scrollbar-none absolute inset-0 overflow-x-hidden overflow-y-auto">
         <div style={{ height: Math.round((size.h * revealOffset) / 100) }} aria-hidden="true" />
         <div className="relative w-full" style={{ height: Math.max(Math.ceil(layout.contentH), size.h) }}>
           {items.map((it, i) => {

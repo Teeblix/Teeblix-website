@@ -114,5 +114,5 @@ export function CalScheduler() {
     };
   }, []);
 
-  return <div ref={hostRef} className="h-[500px] w-full overflow-auto" style={{ background: "var(--bg-2)" }} />;
+  return <div ref={hostRef} data-lenis-prevent className="h-[500px] w-full overflow-auto" style={{ background: "var(--bg-2)" }} />;
 }
