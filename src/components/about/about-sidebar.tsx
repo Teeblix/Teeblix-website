@@ -13,7 +13,7 @@ export function AboutSidebar({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <aside className="relative flex h-screen flex-col pt-8 pb-5">
+    <aside className="relative flex h-screen flex-col pt-5 pb-5">
       <div className="px-8">
         <NavBar />
       </div>
