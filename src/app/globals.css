@@ -238,6 +238,10 @@ select.field-input option {
   -webkit-user-select: auto;
 }
 
+/* Player controls: fg-2 at rest, fg-1 on hover (Framer "My jam" design). */
+.jam-btn { color: var(--fg-2); }
+.jam-btn:hover { color: var(--fg-1); }
+
 .scrollbar-none {
   scrollbar-width: none;
   -ms-overflow-style: none;

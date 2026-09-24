@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { JsonLd } from "@/components/json-ld";
+import { JamPlayer } from "@/components/jam-player";
 import { Preloader } from "@/components/preloader";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { pageMetadata, SITE_URL, siteJsonLd } from "@/lib/seo";
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-full antialiased">
         <SmoothScroll />
         <Preloader />
+        <JamPlayer />
         {/* Wrapper so the preloader can push the whole page in without transforming <body> (which would drag the fixed preloader along). */}
         <div className="site-root">
           <ThemeProvider>{children}</ThemeProvider>
