@@ -4,6 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { TRACKS } from "@/lib/playlist";
 
 const VOLUME = 0.6;
+const FADE_IN_MS = 1200; // a new clip easing up to volume
+const FADE_OUT_MS = 1600; // the tail of a clip easing down before the next
+const FADE_STEP_MS = 320; // quicker fade when Prev/Next is pressed
+const FADE_PAUSE_MS = 260; // quicker still when pausing
 
 function SpeakerIcon({ on }: { on: boolean }) {
   return (
@@ -30,6 +34,8 @@ export function JamPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const indexRef = useRef(Math.floor(Math.random() * TRACKS.length));
   const startedRef = useRef(false);
+  const fadeRef = useRef(0);
+  const switchingRef = useRef(false);
   const [playing, setPlaying] = useState(false);
 
   const audio = useCallback(() => {
@@ -44,34 +50,94 @@ export function JamPlayer() {
     return audioRef.current;
   }, []);
 
-  const goTo = useCallback(
-    (index: number, play: boolean) => {
+  /** Ramps the volume to `target` over `ms`, replacing any fade in flight. */
+  const fadeTo = useCallback(
+    (target: number, ms: number, done?: () => void) => {
       const el = audio();
-      indexRef.current = ((index % TRACKS.length) + TRACKS.length) % TRACKS.length;
-      el.src = TRACKS[indexRef.current].preview;
-      if (play) el.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+      cancelAnimationFrame(fadeRef.current);
+      const from = el.volume;
+      if (ms <= 0 || from === target) {
+        el.volume = target;
+        done?.();
+        return;
+      }
+      const t0 = performance.now();
+      const tick = (now: number) => {
+        const p = Math.min((now - t0) / ms, 1);
+        el.volume = Math.min(1, Math.max(0, from + (target - from) * p));
+        if (p < 1) fadeRef.current = requestAnimationFrame(tick);
+        else done?.();
+      };
+      fadeRef.current = requestAnimationFrame(tick);
     },
     [audio]
   );
 
+  /** Loads a track silently and fades it up. */
+  const goTo = useCallback(
+    (index: number, play: boolean, fadeMs = FADE_IN_MS) => {
+      const el = audio();
+      cancelAnimationFrame(fadeRef.current);
+      indexRef.current = ((index % TRACKS.length) + TRACKS.length) % TRACKS.length;
+      el.volume = 0;
+      el.src = TRACKS[indexRef.current].preview;
+      switchingRef.current = false;
+      if (!play) {
+        el.volume = VOLUME;
+        return;
+      }
+      el.play()
+        .then(() => {
+          setPlaying(true);
+          fadeTo(VOLUME, fadeMs);
+        })
+        .catch(() => {
+          el.volume = VOLUME;
+          setPlaying(false);
+        });
+    },
+    [audio, fadeTo]
+  );
+
+  /** Fades the current clip down, then moves by `delta`. */
+  const fadeToTrack = useCallback(
+    (delta: number, outMs: number) => {
+      if (switchingRef.current) return;
+      switchingRef.current = true;
+      const next = indexRef.current + delta;
+      if (audio().paused) return goTo(next, true);
+      fadeTo(0, outMs, () => goTo(next, true));
+    },
+    [audio, fadeTo, goTo]
+  );
+
   useEffect(() => {
     const el = audio();
+    // Start the hand-over before the clip runs out so one fades down as the
+    // next fades up, rather than cutting off.
+    const onTimeUpdate = () => {
+      if (switchingRef.current || !el.duration || Number.isNaN(el.duration)) return;
+      if (el.duration - el.currentTime <= FADE_OUT_MS / 1000) fadeToTrack(1, FADE_OUT_MS);
+    };
     const onEnded = () => goTo(indexRef.current + 1, true);
     // A clip whose URL has expired shouldn't stall the playlist.
     const onError = () => goTo(indexRef.current + 1, startedRef.current);
     const onPause = () => setPlaying(false);
     const onPlay = () => setPlaying(true);
+    el.addEventListener("timeupdate", onTimeUpdate);
     el.addEventListener("ended", onEnded);
     el.addEventListener("error", onError);
     el.addEventListener("pause", onPause);
     el.addEventListener("play", onPlay);
     return () => {
+      cancelAnimationFrame(fadeRef.current);
+      el.removeEventListener("timeupdate", onTimeUpdate);
       el.removeEventListener("ended", onEnded);
       el.removeEventListener("error", onError);
       el.removeEventListener("pause", onPause);
       el.removeEventListener("play", onPlay);
     };
-  }, [audio, goTo]);
+  }, [audio, fadeToTrack, goTo]);
 
   // Browsers won't let a page start audio on its own, so the music begins at
   // the visitor's first tap, click or key press instead — as close to
@@ -83,7 +149,14 @@ export function JamPlayer() {
       // otherwise the speaker would start and immediately pause the music.
       if (e.target instanceof Element && e.target.closest(".jam-player")) return;
       startedRef.current = true;
-      audio().play().catch(() => setPlaying(false));
+      const el = audio();
+      el.volume = 0;
+      el.play()
+        .then(() => fadeTo(VOLUME, FADE_IN_MS))
+        .catch(() => {
+          el.volume = VOLUME;
+          setPlaying(false);
+        });
     };
     const opts = { once: true, passive: true } as const;
     window.addEventListener("pointerdown", start, opts);
@@ -94,18 +167,28 @@ export function JamPlayer() {
       window.removeEventListener("touchend", start);
       window.removeEventListener("keydown", start);
     };
-  }, [audio]);
+  }, [audio, fadeTo]);
 
   const toggle = () => {
     startedRef.current = true;
     const el = audio();
-    if (el.paused) el.play().catch(() => setPlaying(false));
-    else el.pause();
+    if (el.paused) {
+      el.volume = 0;
+      el.play()
+        .then(() => fadeTo(VOLUME, FADE_IN_MS))
+        .catch(() => {
+          el.volume = VOLUME;
+          setPlaying(false);
+        });
+    } else {
+      setPlaying(false);
+      fadeTo(0, FADE_PAUSE_MS, () => el.pause());
+    }
   };
 
   const step = (delta: number) => {
     startedRef.current = true;
-    goTo(indexRef.current + delta, true);
+    fadeToTrack(delta, FADE_STEP_MS);
   };
 
   const group = "flex items-center p-1";
