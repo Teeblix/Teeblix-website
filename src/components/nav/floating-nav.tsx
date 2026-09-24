@@ -12,10 +12,10 @@ export function FloatingNav() {
       <div className="w-[35%] shrink-0 p-3" style={{ background: "var(--bg-1)" }}>
         <NavBar />
       </div>
-      <span className="text-xs uppercase" style={{ color: "var(--fg-1)" }}>
+      <span className="mt-3 text-xs uppercase" style={{ color: "var(--fg-1)" }}>
         Based in Nigeria
       </span>
-      <span className="ml-auto text-xs uppercase" style={{ color: "var(--fg-1)" }}>
+      <span className="mt-3 ml-auto text-xs uppercase" style={{ color: "var(--fg-1)" }}>
         Open to the world
       </span>
     </header>
