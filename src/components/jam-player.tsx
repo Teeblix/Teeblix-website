@@ -48,6 +48,7 @@ export function JamPlayer() {
   const advancingRef = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [ready, setReady] = useState(false);
+  const startedRef = useRef(false);
 
   const goTo = useCallback((index: number, play: boolean) => {
     const c = controllerRef.current;
@@ -84,7 +85,28 @@ export function JamPlayer() {
     };
   }, [goTo]);
 
+  // Browsers won't let a page start audio on its own, so the music begins at
+  // the visitor's first tap, click or key press instead — as close to
+  // automatic as the platform allows.
+  useEffect(() => {
+    if (!ready) return;
+    const start = () => {
+      if (startedRef.current) return;
+      startedRef.current = true;
+      controllerRef.current?.play();
+      setPlaying(true);
+    };
+    const opts = { once: true, passive: true } as const;
+    window.addEventListener("pointerdown", start, opts);
+    window.addEventListener("keydown", start, opts);
+    return () => {
+      window.removeEventListener("pointerdown", start);
+      window.removeEventListener("keydown", start);
+    };
+  }, [ready]);
+
   const toggle = () => {
+    startedRef.current = true;
     const c = controllerRef.current;
     if (!c) return;
     if (playing) {
