@@ -11,7 +11,9 @@ const res = await fetch(`https://open.spotify.com/embed/playlist/${id}`, {
 const html = await res.text();
 const data = JSON.parse(html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/)[1]);
 const entity = data.props.pageProps.state.data.entity;
-const tracks = entity.trackList.map((t) => ({ uri: t.uri, title: t.title, artist: t.subtitle }));
+const tracks = entity.trackList
+  .filter((t) => t.audioPreview?.url)
+  .map((t) => ({ uri: t.uri, title: t.title, artist: t.subtitle, preview: t.audioPreview.url }));
 
 writeFileSync(
   "src/lib/playlist.ts",
@@ -24,6 +26,8 @@ export interface Track {
   uri: string;
   title: string;
   artist: string;
+  /** Spotify's 30-second clip for the track. */
+  preview: string;
 }
 
 export const TRACKS: Track[] = ${JSON.stringify(tracks, null, 2)};

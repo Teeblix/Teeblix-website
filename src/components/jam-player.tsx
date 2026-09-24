@@ -1,25 +1,9 @@
 "use client";
 
-import Script from "next/script";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TRACKS } from "@/lib/playlist";
 
-/** Minimal shape of the bits of Spotify's iFrame API we use. */
-interface EmbedController {
-  loadUri: (uri: string) => void;
-  play: () => void;
-  pause: () => void;
-  addListener: (event: string, cb: (e: { data: { position: number; duration: number; isPaused: boolean } }) => void) => void;
-  destroy: () => void;
-}
-interface IFrameAPI {
-  createController: (el: HTMLElement, opts: { uri: string; width: number; height: number }, cb: (c: EmbedController) => void) => void;
-}
-declare global {
-  interface Window {
-    onSpotifyIframeApiReady?: (api: IFrameAPI) => void;
-  }
-}
+const VOLUME = 0.6;
 
 function SpeakerIcon({ on }: { on: boolean }) {
   return (
@@ -32,96 +16,96 @@ function SpeakerIcon({ on }: { on: boolean }) {
 
 /**
  * "My jam": a small player pinned to the bottom-right that plays through
- * Teeblix's Spotify playlist. Playback runs in a hidden Spotify embed driven
- * by their iFrame API, so anonymous listeners get Spotify's 30-second
- * previews and anyone signed in to Spotify in the same browser hears the
- * full track. Tracks advance on their own; Prev/Next step through the list.
+ * Teeblix's Spotify playlist, starting from a random track and rolling on to
+ * the next as each clip ends. Playback uses an audio element the page owns,
+ * so a tap on our own controls is enough to start it on phones as well as
+ * desktop (Spotify's embed can only be started from inside its own frame,
+ * which rules it out on mobile).
  *
  * Built to the Framer design: three bg-2 groups, 2px apart, 4px padding,
  * 12px mono labels in fg-2 (Prev/Next go fg-1 on hover) and the Phosphor
  * speaker icon, which gains its waves while playing.
  */
 export function JamPlayer() {
-  const hostRef = useRef<HTMLDivElement>(null);
-  const controllerRef = useRef<EmbedController | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const indexRef = useRef(Math.floor(Math.random() * TRACKS.length));
-  const advancingRef = useRef(false);
-  const [playing, setPlaying] = useState(false);
-  const [ready, setReady] = useState(false);
   const startedRef = useRef(false);
+  const [playing, setPlaying] = useState(false);
 
-  const goTo = useCallback((index: number, play: boolean) => {
-    const c = controllerRef.current;
-    if (!c) return;
-    indexRef.current = ((index % TRACKS.length) + TRACKS.length) % TRACKS.length;
-    advancingRef.current = true;
-    c.loadUri(TRACKS[indexRef.current].uri);
-    if (play) window.setTimeout(() => c.play(), 350);
-    window.setTimeout(() => (advancingRef.current = false), 1200);
+  const audio = useCallback(() => {
+    if (!audioRef.current) {
+      const el = new Audio();
+      el.volume = VOLUME;
+      el.preload = "none";
+      el.crossOrigin = "anonymous";
+      el.src = TRACKS[indexRef.current].preview;
+      audioRef.current = el;
+    }
+    return audioRef.current;
   }, []);
 
+  const goTo = useCallback(
+    (index: number, play: boolean) => {
+      const el = audio();
+      indexRef.current = ((index % TRACKS.length) + TRACKS.length) % TRACKS.length;
+      el.src = TRACKS[indexRef.current].preview;
+      if (play) el.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    },
+    [audio]
+  );
+
   useEffect(() => {
-    window.onSpotifyIframeApiReady = (api) => {
-      const el = hostRef.current;
-      if (!el) return;
-      api.createController(el, { uri: TRACKS[indexRef.current].uri, width: 300, height: 80 }, (controller) => {
-        controllerRef.current = controller;
-        setReady(true);
-        // The embed reports progress; when a clip reaches its end, roll on.
-        controller.addListener("playback_update", (e) => {
-          const { position, duration, isPaused } = e.data;
-          if (!advancingRef.current && duration > 0 && position >= duration - 400) {
-            goTo(indexRef.current + 1, true);
-          } else if (!advancingRef.current) {
-            setPlaying(!isPaused);
-          }
-        });
-      });
-    };
+    const el = audio();
+    const onEnded = () => goTo(indexRef.current + 1, true);
+    // A clip whose URL has expired shouldn't stall the playlist.
+    const onError = () => goTo(indexRef.current + 1, startedRef.current);
+    const onPause = () => setPlaying(false);
+    const onPlay = () => setPlaying(true);
+    el.addEventListener("ended", onEnded);
+    el.addEventListener("error", onError);
+    el.addEventListener("pause", onPause);
+    el.addEventListener("play", onPlay);
     return () => {
-      controllerRef.current?.destroy();
-      controllerRef.current = null;
-      delete window.onSpotifyIframeApiReady;
+      el.removeEventListener("ended", onEnded);
+      el.removeEventListener("error", onError);
+      el.removeEventListener("pause", onPause);
+      el.removeEventListener("play", onPlay);
     };
-  }, [goTo]);
+  }, [audio, goTo]);
 
   // Browsers won't let a page start audio on its own, so the music begins at
   // the visitor's first tap, click or key press instead — as close to
   // automatic as the platform allows.
   useEffect(() => {
-    if (!ready) return;
-    const start = () => {
+    const start = (e: Event) => {
       if (startedRef.current) return;
+      // A first tap on the player itself is that button's job, not ours —
+      // otherwise the speaker would start and immediately pause the music.
+      if (e.target instanceof Element && e.target.closest(".jam-player")) return;
       startedRef.current = true;
-      controllerRef.current?.play();
-      setPlaying(true);
+      audio().play().catch(() => setPlaying(false));
     };
     const opts = { once: true, passive: true } as const;
     window.addEventListener("pointerdown", start, opts);
+    window.addEventListener("touchend", start, opts);
     window.addEventListener("keydown", start, opts);
     return () => {
       window.removeEventListener("pointerdown", start);
+      window.removeEventListener("touchend", start);
       window.removeEventListener("keydown", start);
     };
-  }, [ready]);
+  }, [audio]);
 
   const toggle = () => {
     startedRef.current = true;
-    const c = controllerRef.current;
-    if (!c) return;
-    if (playing) {
-      c.pause();
-      setPlaying(false);
-    } else {
-      c.play();
-      setPlaying(true);
-    }
+    const el = audio();
+    if (el.paused) el.play().catch(() => setPlaying(false));
+    else el.pause();
   };
 
   const step = (delta: number) => {
-    if (!controllerRef.current) return;
+    startedRef.current = true;
     goTo(indexRef.current + delta, true);
-    setPlaying(true);
   };
 
   const group = "flex items-center p-1";
@@ -129,43 +113,32 @@ export function JamPlayer() {
   const label = "text-xs uppercase leading-[1.3] transition-colors duration-200";
 
   return (
-    <>
-      <Script src="https://open.spotify.com/embed/iframe-api/v1" strategy="lazyOnload" />
-      {/* The embed itself does the playing; it stays out of the layout. */}
-      <div aria-hidden="true" className="pointer-events-none fixed h-px w-px overflow-hidden opacity-0" style={{ left: -9999, top: 0 }}>
-        <div ref={hostRef} />
+    <div className="jam-player fixed right-5 bottom-5 z-40 flex items-stretch gap-0.5">
+      <div className={group} style={groupStyle}>
+        <span className={label} style={{ color: "var(--fg-2)" }}>
+          My jam
+        </span>
       </div>
 
-      <div
-        className="fixed right-5 bottom-5 z-40 flex items-stretch gap-0.5"
-        style={{ visibility: ready ? "visible" : "hidden" }}
-      >
-        <div className={group} style={groupStyle}>
-          <span className={label} style={{ color: "var(--fg-2)" }}>
-            My jam
-          </span>
-        </div>
-
-        <div className={`${group} gap-2`} style={groupStyle}>
-          <button type="button" onClick={() => step(-1)} className={`${label} jam-btn cursor-pointer`} aria-label="Previous track">
-            Prev
-          </button>
-          <button type="button" onClick={() => step(1)} className={`${label} jam-btn cursor-pointer`} aria-label="Next track">
-            Next
-          </button>
-        </div>
-
-        <button
-          type="button"
-          onClick={toggle}
-          className={`${group} cursor-pointer transition-colors duration-200`}
-          style={{ ...groupStyle, color: playing ? "var(--fg-1)" : "var(--fg-2)" }}
-          aria-label={playing ? "Mute music" : "Play music"}
-          aria-pressed={playing}
-        >
-          <SpeakerIcon on={playing} />
+      <div className={`${group} gap-2`} style={groupStyle}>
+        <button type="button" onClick={() => step(-1)} className={`${label} jam-btn cursor-pointer`} aria-label="Previous track">
+          Prev
+        </button>
+        <button type="button" onClick={() => step(1)} className={`${label} jam-btn cursor-pointer`} aria-label="Next track">
+          Next
         </button>
       </div>
-    </>
+
+      <button
+        type="button"
+        onClick={toggle}
+        className={`${group} cursor-pointer transition-colors duration-200`}
+        style={{ ...groupStyle, color: playing ? "var(--fg-1)" : "var(--fg-2)" }}
+        aria-label={playing ? "Pause music" : "Play music"}
+        aria-pressed={playing}
+      >
+        <SpeakerIcon on={playing} />
+      </button>
+    </div>
   );
 }
