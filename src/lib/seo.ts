@@ -28,7 +28,10 @@ export function pageMetadata({ title, description, path, image }: PageMeta): Met
   return {
     title: fullTitle,
     description,
-    alternates: { canonical: path },
+    alternates: {
+      canonical: path,
+      types: { "application/rss+xml": [{ url: "/rss.xml", title: `${PERSON_NAME} (${SITE_NAME}) — Projects` }] },
+    },
     openGraph: {
       type: "website",
       siteName: SITE_NAME,

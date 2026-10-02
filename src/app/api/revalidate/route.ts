@@ -8,7 +8,7 @@ import { parseBody } from "next-sanity/webhook";
 type Payload = { _type: string; slug?: string | null };
 
 const PATHS: Record<string, string[]> = {
-  project: ["/", "/projects", "/sitemap.xml"],
+  project: ["/", "/projects", "/sitemap.xml", "/rss.xml"],
   shot: ["/shots"],
   drop: ["/drops", "/sitemap.xml"],
 };
