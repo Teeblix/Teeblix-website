@@ -36,6 +36,7 @@ export const metadata: Metadata = {
       "I design and build high-quality Framer websites, landing pages and digital experiences for ambitious brands, agencies and businesses worldwide. Based in Nigeria, working globally.",
   }),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+  verification: { other: { "p:domain_verify": "63794f02961b77f4a8547daa7ad57006" } },
 };
 
 // Applied before hydration so the stored theme choice never flashes the
