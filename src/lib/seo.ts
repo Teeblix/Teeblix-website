@@ -4,7 +4,7 @@ import { EMAIL, SOCIALS } from "./site-content";
 export const SITE_URL = "https://teeblix.com";
 export const SITE_NAME = "Teeblix";
 export const PERSON_NAME = "Blessing Adewale";
-export const ROLE = "Designer & Framer Developer";
+export const ROLE = "Independent Designer & Developer";
 /** Search-facing role phrasing (from keyword research): used in titles/descriptions, not the visible tagline. */
 export const SEO_ROLE = "Independent Designer, Framer Developer";
 
