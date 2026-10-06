@@ -7,26 +7,24 @@ export const NAV_LINKS: { title: string; href?: string }[] = [
   { title: "Work With Me", href: "/work-with-me" },
 ];
 
-export const INDUSTRIES = [
-  "Design Studio",
+export const EXPERIENCE = [
+  "Design & Creative",
   "Health & Wellness",
-  "Marketing",
-  "Non - Profit",
-  "Podcast",
-  "Legal & Accounting",
-  "Web3",
-  "Personal Portfolio",
+  "Marketing & Communications",
+  "Legal & Professional Services",
+  "Technology & Web3",
+  "Media & Personal Brands",
+  "Lifestyle & Consumer Brands",
 ];
 
-export const WHAT_I_DO = [
-  "Web Design & UX/UI",
-  "Framer Development",
-  "Figma to Framer Conversion",
-  "Framer SEO Optimization",
-  "Interaction Design",
-  "WordPress & Webflow to Framer Migration",
-  "Framer Commerce",
+/** Two groups, separated by a short rule: what I design, then what I build. */
+export const WHAT_I_DO: string[][] = [
+  ["Digital Product Design", "Web Design & UX/UI", "Mobile Experience Design", "Interaction Design"],
+  ["Framer Development", "Figma \u2192 Framer", "Framer SEO", "Webflow/WordPress \u2192 Framer"],
 ];
+
+/** The same services as one flat list, for schema.org and metadata. */
+export const SERVICES = WHAT_I_DO.flat();
 
 export const SOCIALS = [
   { title: "LinkedIn", href: "https://www.linkedin.com/in/teeblix" },

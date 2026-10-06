@@ -6,7 +6,7 @@ import { SiteName } from "./site-name";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { CopyEmail } from "@/components/home/copy-email";
 import { InfoList } from "@/components/home/info-list";
-import { EMAIL, INDUSTRIES, NAV_LINKS, QUOTE, SOCIALS, WHAT_I_DO } from "@/lib/site-content";
+import { EMAIL, EXPERIENCE, NAV_LINKS, QUOTE, SOCIALS, WHAT_I_DO } from "@/lib/site-content";
 
 function ToggleIcon({ open }: { open: boolean }) {
   return (
@@ -84,7 +84,7 @@ export function MobileNav() {
         <div className="min-h-0 overflow-hidden">
           <div className="mt-3 flex flex-col gap-10 p-3" style={{ background: "var(--bg-1)" }}>
             <div className="flex flex-col gap-10 md:flex-row md:gap-10">
-              <InfoList title="Industries I've worked for" items={INDUSTRIES} />
+              <InfoList title="Selected experience" items={EXPERIENCE} />
               <InfoList title="What I do" items={WHAT_I_DO} />
               <div className="flex flex-col gap-3 md:ml-auto">
                 <span style={{ color: "var(--fg-2)" }}>Email me</span>

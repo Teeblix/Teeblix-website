@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { pageMetadata, PERSON_ID, webPageJsonLd } from "@/lib/seo";
-import { WHAT_I_DO } from "@/lib/site-content";
+import { SERVICES } from "@/lib/site-content";
 import { Sidebar } from "@/components/home/sidebar";
 import { LocationBadges } from "@/components/location-badges";
 import { MobileNav } from "@/components/nav/mobile-nav";
@@ -58,7 +58,7 @@ export default function WorkWithMePage() {
                 hasOfferCatalog: {
                   "@type": "OfferCatalog",
                   name: "Services",
-                  itemListElement: WHAT_I_DO.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s } })),
+                  itemListElement: SERVICES.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s } })),
                 },
               },
             },

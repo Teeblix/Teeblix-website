@@ -3,7 +3,7 @@ import { InfoList } from "./info-list";
 import { LineLens } from "./line-lens";
 import { NavItem } from "@/components/nav/nav-item";
 import { NavBar } from "@/components/nav/nav-bar";
-import { EMAIL, INDUSTRIES, QUOTE, SOCIALS, WHAT_I_DO } from "@/lib/site-content";
+import { EMAIL, EXPERIENCE, QUOTE, SOCIALS, WHAT_I_DO } from "@/lib/site-content";
 
 export function Sidebar() {
   return (
@@ -16,7 +16,7 @@ export function Sidebar() {
         </div>
 
         <div className="grid grid-cols-2 gap-10">
-          <InfoList title="Industries I've worked for" items={INDUSTRIES} />
+          <InfoList title="Selected experience" items={EXPERIENCE} />
           <InfoList title="What I do" items={WHAT_I_DO} />
           <div className="flex flex-col gap-3">
             <span className="text-xs uppercase" style={{ color: "var(--fg-2)" }}>
