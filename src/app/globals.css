@@ -231,11 +231,16 @@ select.field-input option {
   color: var(--bg-1);
 }
 
-/* The embedded Sanity Studio needs normal selection behaviour. */
+/* The embedded Sanity Studio brings its own chrome: let it select text and
+   scroll its own panes, whatever the site sets globally. */
 .studio-root,
 .studio-root * {
   user-select: auto;
   -webkit-user-select: auto;
+}
+html:has(.studio-root),
+html:has(.studio-root) body {
+  overflow: auto;
 }
 
 /* Player controls: fg-2 at rest, fg-1 on hover (Framer "My jam" design). */
