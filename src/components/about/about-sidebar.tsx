@@ -3,6 +3,7 @@
 import { useRef, type ReactNode } from "react";
 import { NavBar } from "@/components/nav/nav-bar";
 import { NavItem } from "@/components/nav/nav-item";
+import { NowHint } from "@/components/now/now-hint";
 import { SOCIALS } from "@/lib/site-content";
 import { ScrollProgressText } from "./scroll-progress-text";
 import { ScrollHint } from "./scroll-hint";
@@ -32,10 +33,14 @@ export function AboutSidebar({ children }: { children: ReactNode }) {
 
       <div className="h-5" />
 
-      <nav className="flex flex-wrap gap-1.5 pl-8 text-xs uppercase leading-[1.2]">
-        {SOCIALS.map((s) => (
-          <NavItem key={s.title} href={s.href} title={s.title} newTab />
-        ))}
+      {/* Socials on the left, the Now shortcut at the far right, as on the home sidebar. */}
+      <nav className="flex flex-wrap items-start justify-between gap-1.5 pr-5 pl-8 text-xs uppercase leading-[1.2]">
+        <span className="flex flex-wrap gap-1.5">
+          {SOCIALS.map((s) => (
+            <NavItem key={s.title} href={s.href} title={s.title} newTab />
+          ))}
+        </span>
+        <NowHint />
       </nav>
 
       <ScrollHint scrollRef={scrollRef} className="absolute right-[25px] bottom-[50px]" />

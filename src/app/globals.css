@@ -240,6 +240,7 @@ select.field-input option {
   animation: now-scrim-in 0.24s ease both;
 }
 .now-panel {
+  border: 1px solid var(--border-1);
   animation: now-panel-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .now-scrim.now-leaving {
