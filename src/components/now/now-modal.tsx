@@ -148,8 +148,8 @@ export function NowModal({ covers }: { covers: Record<string, string> }) {
             className="now-panel flex max-h-[calc(100dvh-40px)] w-[311px] max-w-full flex-col gap-5 p-3 outline-none"
             style={{ background: "var(--bg-1)" }}
           >
-            {/* The two chips sit 2px apart, like the music player's groups. */}
-            <div className="flex flex-wrap items-start gap-0.5">
+            {/* NOW on the left edge, the month on the right — each chip only as wide as its text. */}
+            <div className="flex flex-wrap items-start justify-between gap-3">
               <span className={pill} style={{ ...fg2, background: "var(--bg-2)" }}>
                 Now
               </span>
