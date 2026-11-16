@@ -231,6 +231,50 @@ select.field-input option {
   color: var(--bg-1);
 }
 
+/* "NOW" modal: the page dims and blurs behind a bg-1 panel. Both fade in, the
+   panel rising a touch; closing runs the same move backwards. */
+.now-scrim {
+  background: color-mix(in srgb, var(--bg-1) 72%, transparent);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: now-scrim-in 0.24s ease both;
+}
+.now-panel {
+  animation: now-panel-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.now-scrim.now-leaving {
+  animation: now-scrim-in 0.22s ease both reverse;
+}
+html.now-open {
+  overflow: hidden;
+}
+
+@keyframes now-scrim-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes now-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .now-scrim,
+  .now-panel,
+  .now-scrim.now-leaving {
+    animation: none;
+  }
+}
+
 /* The embedded Sanity Studio brings its own chrome: let it select text and
    scroll its own panes, whatever the site sets globally. */
 .studio-root,

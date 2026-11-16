@@ -9,6 +9,8 @@ const HOLD_MS = 650; // pause on the resolved line
 const TICK_MS = 30;
 const EXIT_MS = 400;
 const EVENT = "teeblix:preloader";
+/** Fired once the preloader has left and the page is on screen. */
+export const PRELOADER_DONE = "teeblix:preloader-done";
 
 /** Replays the preloader (used by the name/home link). */
 export function runPreloader() {
@@ -88,6 +90,7 @@ export function Preloader() {
       root.classList.remove("preloading");
       site()?.classList.remove("site-enter");
       setPhase("done");
+      window.dispatchEvent(new Event(PRELOADER_DONE));
     })();
 
     return () => {

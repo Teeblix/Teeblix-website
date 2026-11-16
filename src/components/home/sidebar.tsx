@@ -3,6 +3,7 @@ import { InfoList } from "./info-list";
 import { LineLens } from "./line-lens";
 import { NavItem } from "@/components/nav/nav-item";
 import { NavBar } from "@/components/nav/nav-bar";
+import { NowHint } from "@/components/now/now-hint";
 import { EMAIL, EXPERIENCE, QUOTE, SOCIALS, WHAT_I_DO } from "@/lib/site-content";
 
 export function Sidebar() {
@@ -31,10 +32,15 @@ export function Sidebar() {
         {QUOTE}
       </p>
 
-      <nav className="flex flex-wrap gap-1.5 text-xs uppercase leading-[1.2]">
-        {SOCIALS.map((s) => (
-          <NavItem key={s.title} href={s.href} title={s.title} newTab />
-        ))}
+      {/* Socials on the left, the Now shortcut at the far right — the row sits
+          20px from the edge on the Framer original, not the sidebar's 32px. */}
+      <nav className="-mr-3 flex flex-wrap items-start justify-between gap-1.5 text-xs uppercase leading-[1.2]">
+        <span className="flex flex-wrap gap-1.5">
+          {SOCIALS.map((s) => (
+            <NavItem key={s.title} href={s.href} title={s.title} newTab />
+          ))}
+        </span>
+        <NowHint />
       </nav>
     </aside>
   );

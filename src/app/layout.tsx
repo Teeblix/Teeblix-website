@@ -7,6 +7,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { JsonLd } from "@/components/json-ld";
 import { SiteChrome } from "@/components/site-chrome";
 import { pageMetadata, SITE_URL, siteJsonLd } from "@/lib/seo";
+import { getProjectCovers } from "@/sanity/queries";
+import { NOW_PROJECT_SLUGS } from "@/lib/now";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -46,7 +48,10 @@ try {
 } catch (e) {}
 `;
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  // The Now modal lives in the site chrome, so its cover images are fetched here.
+  const nowCovers = await getProjectCovers(NOW_PROJECT_SLUGS);
+
   return (
     <html
       lang="en"
@@ -59,7 +64,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <JsonLd data={siteJsonLd()} />
       </head>
       <body className="min-h-full antialiased">
-        <SiteChrome />
+        <SiteChrome nowCovers={nowCovers} />
         {/* Wrapper so the preloader can push the whole page in without transforming <body> (which would drag the fixed preloader along). */}
         <div className="site-root">
           <ThemeProvider>{children}</ThemeProvider>

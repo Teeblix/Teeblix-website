@@ -117,3 +117,14 @@ export async function getShots(): Promise<Shot[]> {
       video: r.video ?? undefined,
     }));
 }
+
+/** Cover image URLs for a handful of projects, keyed by slug (used by the Now modal). */
+export async function getProjectCovers(slugs: string[]): Promise<Record<string, string>> {
+  if (!slugs.length) return {};
+  const rows = await sanityFetch<{ slug: string; cover: string | null }[]>(
+    `*[_type == "project" && slug.current in $slugs] { "slug": slug.current, "cover": cover.asset->url }`,
+    { slugs },
+    ["project"]
+  );
+  return Object.fromEntries(rows.flatMap((r) => (r.cover ? [[r.slug, r.cover] as const] : [])));
+}
