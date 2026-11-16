@@ -88,7 +88,7 @@ export function NowModal({ covers }: { covers: Record<string, string> }) {
       if (e.key === "Escape" && open) return hide();
       if (e.key !== "n" && e.key !== "N") return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      const el = e.target as HTMLElement | null;
+      const el = e.target instanceof Element ? e.target : null;
       if (el?.closest("input, textarea, select, [contenteditable='true']")) return;
       open ? hide() : show();
     };

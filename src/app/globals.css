@@ -231,8 +231,8 @@ select.field-input option {
   color: var(--bg-1);
 }
 
-/* "NOW" modal: the page dims and blurs behind a bg-1 panel. Both fade in, the
-   panel rising a touch; closing runs the same move backwards. */
+/* "NOW" modal: the page dims and blurs behind a bg-1 panel, which slides up
+   into place as it fades in; closing drops it back down. */
 .now-scrim {
   background: color-mix(in srgb, var(--bg-1) 72%, transparent);
   backdrop-filter: blur(3px);
@@ -241,10 +241,13 @@ select.field-input option {
 }
 .now-panel {
   border: 1px solid var(--border-1);
-  animation: now-panel-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: now-panel-in 0.44s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .now-scrim.now-leaving {
   animation: now-scrim-in 0.22s ease both reverse;
+}
+.now-scrim.now-leaving .now-panel {
+  animation: now-panel-out 0.22s cubic-bezier(0.4, 0, 1, 1) both;
 }
 html.now-open {
   overflow: hidden;
@@ -261,17 +264,31 @@ html.now-open {
 @keyframes now-panel-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(28px);
+  }
+  55% {
+    opacity: 1;
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+@keyframes now-panel-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .now-scrim,
   .now-panel,
-  .now-scrim.now-leaving {
+  .now-scrim.now-leaving,
+  .now-scrim.now-leaving .now-panel {
     animation: none;
   }
 }
